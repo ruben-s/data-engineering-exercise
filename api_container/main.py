@@ -8,6 +8,7 @@ app=Flask(__name__)
 #we are importing our prediction function from the prediction.py file
 from prediction import car_price_prediction
 
+# all parameters needed for a prediction
 dict_keys = ('vehicletype','gearbox','powerps','model','km','regmonth','fueltype','brandid')
 
 general_error_msg = ('''Input to estimate should be provided as json to parameter 'prediction_input'. ''' +
@@ -46,16 +47,16 @@ def validate_and_format_input(input_to_validate) -> dict:
 
 @app.route("/",methods=['GET','POST'])
 def index():
+    # create empty response to be completed depending on outcome of prediction
     resp = Response()
     if request.method=='GET':
         prediction_input = request.args.get('prediction_input')
         result_dict = validate_and_format_input(prediction_input)
+        # if an error is found in the validation of the input then set response accordingly
         if result_dict.get('error'):
-            # return jsonify(result_dict.get('error'))
-            # return result_dict.get('error')
             response_data = {'error' : str(result_dict.get('error')) + general_error_msg}
-            # resp = Response(result_dict.get('error'), mimetype='application/json')
             resp.status_code = 400
+        # no error so input seems ok
         else:
             validated_prediction_input = result_dict.get('validated_input')
             try:
@@ -63,16 +64,12 @@ def index():
             except Exception as e:
                 response_data = {'error' : str(e) + general_error_msg}
                 resp.status_code = 400
-                # return jsonify( str(e) + general_error_msg)
             response_data = { 'estimated_value': str(predicted_value)}    
             resp.status_code = 200
-            # return jsonify( estimated_value = str(predicted_value)), status_code
-            # return resp
     else:
-        # return jsonify({'Error':"This is a GET API method"})
         response_data = { 'error':"This is a GET API method" }
         resp.status_code = 400
-
+    # fill the response object with the actual prediction in json format
     resp = Response(json.dumps(response_data), mimetype='application/json')
     return resp
 

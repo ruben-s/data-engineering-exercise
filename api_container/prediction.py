@@ -2,7 +2,6 @@ import joblib
 import lightgbm as lgb
 import numpy as np
 
-
 def retrieve_model(path):
     try:
         file_handle = open(path,'rb')
@@ -20,7 +19,8 @@ def car_price_prediction(single_input) -> float:
     predicted_value_float = round(predicted_value.item(),3)
     return predicted_value_float
 
-
-# model_test_input = [[3,1,190,-1,125000,5,3,1]]
-# predicted_value = car_price_prediction(model_test_input)
-# print(predicted_value)
+# allow testing of the module independently
+if __name__ == '__main__':
+    model_test_input = [[3,1,190,-1,125000,5,3,1]]
+    predicted_value = car_price_prediction(model_test_input)
+    print(predicted_value)
