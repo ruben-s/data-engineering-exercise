@@ -1,0 +1,9 @@
+jupyterlab
+pandas
+requests
+lightgbm==2.2.2
+geopandas
+folium
+gdal==2.4.2
+crs
+swifter
