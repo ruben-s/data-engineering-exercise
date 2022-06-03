@@ -107,3 +107,6 @@ py3_dsclp/
 
 # data files
 **/data/
+
+# zip files
+*.zip
